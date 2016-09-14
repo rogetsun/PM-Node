@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="assets/img/p.png">
+    <meta charset="UTF-8">
+    <meta content="text/html;charset:utf-8" http-equiv="Content-Type">
+    <meta http-equiv="x-ua-compatible" content="chrome=1,IE=Edge">
+    <base href="/">
+    <title>项目管理主机节点</title>
+    <link rel="stylesheet" href="assets/diy/css/index.min.css">
+    <link rel="stylesheet" href="assets/node_modules/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="assets/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/diy/css/ng-animation.min.css">
+</head>
+<body ng-app="app" layout="column" style="margin:0;">
+<div layout="column" layout-align="center center" style="background-color: #04508d;" flex>
+    <md-card style="min-width: 404px;">
+        <md-card-header>
+            <md-icon md-svg-src="assets/svg/p.svg" class="md-primary" style="height:80px;width:80px;"></md-icon>
+        </md-card-header>
+        <md-card-content style="color:#d43f3a">
+            {{ret_code}}
+        </md-card-content>
+        <md-card-content style="color:#d43f3a">
+            {{ret_msg}}
+        </md-card-content>
+    </md-card>
+</div>
+</body>
+
+<script src="assets/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="assets/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="assets/node_modules/angular/angular.js"></script>
+<script src="assets/node_modules/angular-animate/angular-animate.min.js"></script>
+<script src="assets/node_modules/angular-aria/angular-aria.min.js"></script>
+<script src="assets/node_modules/angular-material/angular-material.min.js"></script>
+<script>
+    angular.module('app', ['ngMaterial'])
+            .config(function ($mdThemingProvider, $mdIconProvider) {
+                //设置图标
+                var svgIcons = [
+                    'p'
+                ];
+
+                for (var i = 0; i < svgIcons.length; i++) {
+                    $mdIconProvider.icon(svgIcons[i], "assets/svg/" + svgIcons[i] + ".svg", 10);
+                }
+
+                //sr-bank调色板
+                $mdThemingProvider.definePalette('srBlue', {
+                    '50': '04508d',
+                    '100': 'b4dFFF',
+                    '200': '80d8ff',
+                    '300': '04508d',
+                    '400': '04508d',
+                    '500': '04508d',
+                    '600': '04508d',
+                    '700': '04508d',
+                    '800': '04508d',
+                    '900': '01579b',
+                    'A100': '29b6f6',
+                    'A200': '04508d',
+                    'A400': '04508d',
+                    'A700': '04508d',
+                    'contrastDefaultColor': 'light'
+                });
+                $mdThemingProvider.definePalette('srGrey', {
+                    '50': 'eee',
+                    '100': 'eee',
+                    '200': 'eee',
+                    '300': 'eee',
+                    '400': 'eee',
+                    '500': 'eee',
+                    '600': 'eee',
+                    '700': 'eee',
+                    '800': 'eee',
+                    '900': 'eee',
+                    'A100': 'eee',
+                    'A200': 'eee',
+                    'A400': 'eee',
+                    'A700': 'eee',
+                    'contrastDefaultColor': 'dark'
+                });
+                $mdThemingProvider.theme('default')
+                        .primaryPalette('srBlue')
+                        .accentPalette('srGrey')
+                        .warnPalette('red')
+                        .backgroundPalette('grey');
+            });
+</script>
+</html>
