@@ -21,6 +21,7 @@ class ExecHandler(WebSocketHandler):
         if msg and msg['cmds']:
             Executor(msg['cmds'], self).start()
         else:
+            self.write_message(json.dumps({'msg_type': 'cmd_err', 'msg': 'no commands to execute'}))
             self.close(code=9, reason='no commands to execute')
 
     def open(self, *args, **kwargs):
@@ -46,22 +47,26 @@ class Executor(threading.Thread):
     def exec_cmd(self):
         for cmd in self.cmds:
             msg = 'begin to exec [%s]' % (cmd,)
-            self.websocket.write_message(msg)
+            self.websocket.write_message(json.dumps({'msg_type': 'status', 'msg': msg}))
             logger.debug(msg)
             result = commands.getstatusoutput(cmd=cmd)
             exit_code = result[0]
             echo = result[1]
             if exit_code == 0:
-                msg = 'exec [%s] ok' % (cmd,)
+                msg = {'msg_type': 'status', 'msg': 'exec [%s] ok' % (cmd,)}
                 time.sleep(5)
-                self.websocket.write_message(msg)
+                self.websocket.write_message(json.dumps(msg))
                 logger.debug(msg)
             else:
                 logger.error('exec [%s] error, exit=%s, echo=%s', (cmd, exit_code, echo))
                 # self.websocket.write_message('exec [%s] error, exit=%s, echo=%s', (cmd, exit_code, echo))
+                self.websocket.write_message(json.dumps({'msg_type': 'cmd_err', 'msg': echo}))
                 self.websocket.close(code=exit_code, reason=echo)
                 break
-
+        msg = {'msg_type': 'cmd_end', 'msg': 'exec cmds success'}
+        logger.debug(msg)
+        self.websocket.write_message(json.dumps(msg))
+        logger.debug("exec over ok, send close event.")
         self.websocket.close(code=0)
 
     def run(self):
