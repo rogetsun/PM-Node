@@ -62,7 +62,7 @@ class Executor(threading.Thread):
                 # self.websocket.write_message('exec [%s] error, exit=%s, echo=%s', (cmd, exit_code, echo))
                 self.websocket.write_message(json.dumps({'msg_type': 'cmd_err', 'msg': echo}))
                 self.websocket.close(code=exit_code, reason=echo)
-                break
+                return
         msg = {'msg_type': 'cmd_end', 'msg': 'exec cmds success'}
         logger.debug(msg)
         self.websocket.write_message(json.dumps(msg))
