@@ -50,6 +50,7 @@ class Executor(threading.Thread):
             self.websocket.write_message(json.dumps({'msg_type': 'status', 'msg': msg}))
             logger.debug(msg)
             result = commands.getstatusoutput(cmd=cmd)
+            logger.debug('执行结果：%s' % (result,))
             exit_code = result[0]
             echo = result[1]
             if exit_code == 0:
@@ -58,7 +59,7 @@ class Executor(threading.Thread):
                 self.websocket.write_message(json.dumps(msg))
                 logger.debug(msg)
             else:
-                logger.error('exec [%s] error, exit=%s, echo=%s', (cmd, exit_code, echo))
+                logger.error('exec [%s] error, %s' % (cmd, result))
                 # self.websocket.write_message('exec [%s] error, exit=%s, echo=%s', (cmd, exit_code, echo))
                 self.websocket.write_message(json.dumps({'msg_type': 'cmd_err', 'msg': echo}))
                 self.websocket.close(code=exit_code, reason=echo)
